@@ -494,10 +494,6 @@ export default function App() {
                 <Row label="Năng suất lao động trong nước">
                   {(snap.player.currentCapacity ?? 0).toFixed(1)}/s
                 </Row>
-
-                <Row label="Năng suất lao động ở Vùng Đất Mới">
-                  {snap.player.foreignCapacity.toFixed(1)}/s
-                </Row>
                 <div className="flex gap-2 mt-2">
                   {(() => {
                     const cantUpgrade =
@@ -562,15 +558,7 @@ export default function App() {
                         disabled={isEnded}
                         style={disStyle(isEnded)}
                       >
-                        Trust: Thôn tính đối thủ
-                      </button>
-                      <button
-                        className="btn"
-                        onClick={exportCapital}
-                        disabled={isEnded}
-                        style={disStyle(isEnded)}
-                      >
-                        Xuất khẩu tư bản
+                        Thôn tính đối thủ
                       </button>
                     </div>
                   </>
@@ -628,27 +616,6 @@ export default function App() {
                 {snap.stage === "MONOPOLY" && (
                   <>
                     <hr className="my-3 border-slate-700" />
-                    <Row label="Đặt giá độc quyền">
-                      <input
-                        type="range"
-                        min={snap.socialValue * 1.05}
-                        max={50}
-                        step={0.1}
-                        value={
-                          gsRef.current.marketPriceOverride ?? snap.marketPrice
-                        }
-                        onChange={(e) =>
-                          setMonopolyPrice(parseFloat(e.target.value))
-                        }
-                        disabled={isEnded}
-                      />
-                      <span className="ml-2">
-                        {(
-                          gsRef.current.marketPriceOverride ?? snap.marketPrice
-                        ).toFixed(2)}{" "}
-                        đ
-                      </span>
-                    </Row>
                   </>
                 )}
                 <hr className="my-3 border-slate-700" />
