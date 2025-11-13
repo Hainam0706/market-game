@@ -84,7 +84,6 @@ export function buildSampleMap() {
     marketplace: { x: 30, y: 8, w: 16, h: 9 },
     raw: { x: 54, y: 10, w: 18, h: 10 },
     bank: { x: 8, y: 31, w: 16, h: 9 },
-    bulletin: { x: 30, y: 31, w: 18, h: 9 },
     hq: { x: 54, y: 31, w: 18, h: 10 },
   };
 
