@@ -719,7 +719,7 @@ export default function App() {
               </Panel>
             )}
 
-            {ui.openPanel === "hq" && snap.stage === "MONOPOLY" && (
+            {/* {ui.openPanel === "hq" && snap.stage === "MONOPOLY" && (
               <Panel
                 title="Trụ Sở / Chính Phủ — Công cụ độc quyền"
                 onClose={() => setUI({ ...ui, openPanel: null })}
@@ -752,7 +752,7 @@ export default function App() {
                   </button>
                 </div>
               </Panel>
-            )}
+            )} */}
           </div>
         </div>
 
