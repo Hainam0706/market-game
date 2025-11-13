@@ -25,7 +25,7 @@ export function initGameState() {
       individualCost: 10, // Chi phí sản xuất 1 đơn vị (công nghệ hiện tại)
       capacity: 6, // Công suất sản xuất nội địa
       foreignCapacity: 0, // Công suất sản xuất ngoài nước (xuất khẩu)
-      wage: 5, // Lương trả cho công nhân
+      wage: 50, // Lương trả cho công nhân
       hours: 8, // Số giờ làm việc mỗi ngày
       cartelMode: false, // Chế độ Cartel (chỉ khi giai đoạn MONOPOLY)
       ownsRawMonopoly: false, // Sở hữu độc quyền nguyên liệu

@@ -200,8 +200,8 @@ export default function App() {
     const gs = gsRef.current;
     if (guardEnded()) return;
 
-    // Nếu đã tối ưu
-    if (gs.player.individualCost <= 5) {
+    // Nếu đã đạt tối ưu
+    if ((gs.player.essentialHours ?? 6) <= 2) {
       gs.toast = "Đã đạt mức tối ưu của công nghệ hiện tại.";
       setSnap(snapshot(gs));
       return;
@@ -211,15 +211,19 @@ export default function App() {
 
     // Nâng cấp
     const newCost = Math.max(5, gs.player.individualCost - 0.5);
-    const didUpgrade = newCost < gs.player.individualCost;
+    const newEssential = Math.max(2, (gs.player.essentialHours ?? 6) - 0.5);
+    const didUpgrade =
+      newCost < gs.player.individualCost ||
+      newEssential < (gs.player.essentialHours ?? 6);
 
     gs.player.individualCost = newCost;
     gs.player.capacity += 10;
+    gs.player.essentialHours = newEssential;
 
     if (!didUpgrade) {
       gs.toast = "Đã đạt mức tối ưu của công nghệ hiện tại.";
     } else {
-      gs.toast = `Nâng cấp thành công! Công suất +5, chi phí giảm 0.5.`;
+      gs.toast = `Nâng cấp thành công! Công suất +10, chi phí giảm 0.5, thời gian tất yếu giảm 0.5 giờ.`;
     }
 
     const q3 = gs.quests.find((q) => q.id === "q3");
@@ -482,14 +486,17 @@ export default function App() {
                 title="Khu Sản Xuất — Nâng cấp & Lao động"
                 onClose={() => setUI({ ...ui, openPanel: null })}
               >
-                <Row label="Chi phí cá biệt (ước tính)">
-                  {snap.player.individualCost.toFixed(2)} đ
+                <Row label="Giờ lao động tất yếu">
+                  <span className="ml-2 w-16 inline-block">
+                    {(snap.player.essentialHours ?? 6).toFixed(1)}
+                  </span>
                 </Row>
-                <Row label="Công suất trong nước">
-                  {snap.player.capacity.toFixed(1)} / 10s
+                <Row label="Năng suất lao động trong nước">
+                  {(snap.player.currentCapacity ?? 0).toFixed(1)}/s
                 </Row>
-                <Row label="Công suất ở Vùng Đất Mới">
-                  {snap.player.foreignCapacity.toFixed(1)} / 10s
+
+                <Row label="Năng suất lao động ở Vùng Đất Mới">
+                  {snap.player.foreignCapacity.toFixed(1)}/s
                 </Row>
                 <div className="flex gap-2 mt-2">
                   {(() => {
@@ -504,29 +511,12 @@ export default function App() {
                         disabled={cantUpgrade}
                         style={disStyle(cantUpgrade)}
                       >
-                        Nâng cấp tư liệu sản xuất (+5 công suất, -1 chi phí):
-                        400 đ
+                        Nâng cấp tư liệu sản xuất: 400 đ
                       </button>
                     );
                   })()}
                 </div>
                 <hr className="my-3 border-slate-700" />
-                <Row label="Giờ lao động tất yếu / ngày">
-                  <input
-                    type="range"
-                    min={1}
-                    max={8}
-                    step={0.5}
-                    value={snap.player.essentialHours ?? 6} // thêm essentialHours vào gs.player nếu chưa có
-                    onChange={(e) =>
-                      changeEssentialHours(parseFloat(e.target.value))
-                    }
-                    disabled={isEnded}
-                  />
-                  <span className="ml-2 w-16 inline-block">
-                    {(snap.player.essentialHours ?? 6).toFixed(1)}
-                  </span>
-                </Row>
 
                 <Row label="Giờ làm / ngày">
                   <input
@@ -543,7 +533,17 @@ export default function App() {
                   </span>
                 </Row>
 
-                <Row label="Chỉ số bóc lột">
+                <Row label="Lương / công nhân">
+                  <span
+                    value={snap.player.wage ?? 50} // Dùng ?? 5 để dự phòng
+                    disabled={isEnded}
+                  />
+                  <span className="ml-2 w-16 inline-block">
+                    {(snap.player.wage ?? 5).toFixed(1)}
+                  </span>
+                </Row>
+
+                <Row label="Tỷ suất giá trị thăng dư">
                   <MiniExploitationGauge
                     value={computeExploitationIndex(
                       snap.player.hours,
@@ -592,7 +592,7 @@ export default function App() {
                     disabled={!gsRef.current._strike || isEnded}
                     style={disStyle(!gsRef.current._strike || isEnded)}
                   >
-                    Đàm phán đình công
+                    Đàm phán
                   </button>
 
                   {/* Hiển thị toast */}

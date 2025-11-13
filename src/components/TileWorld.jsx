@@ -9,7 +9,6 @@ const ZONE_META = {
   marketplace: { label: "Khu Chợ", emoji: "🛒" },
   raw: { label: "Khu Nguyên Liệu", emoji: "🧱" },
   bank: { label: "Ngân Hàng", emoji: "🏦" },
-  bulletin: { label: "Bảng Tin Kinh Tế", emoji: "📰" },
   hq: { label: "Trụ Sở / Chính Phủ", emoji: "🏛️" },
 };
 

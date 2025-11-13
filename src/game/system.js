@@ -111,25 +111,27 @@ export function produceUnits(gs, who) {
 
   if (!actor || actor.bankrupt) return;
 
-  // Nếu người chơi đang bị đình công, dừng sản xuất
-  if (who === "player" && gs._strike > 0) return;
+  if (who === "player" && gs._strike > 0) {
+    actor.currentCapacity = 0;
+    return;
+  }
 
-  // Mỗi tick: sản lượng = 50% công suất
-  const perTick = (actor.capacity ?? 5) * 0.5;
-
-  // Nguyên liệu cần cho sản xuất = 30% sản lượng
+  const baseCapacity = actor.baseCapacity ?? actor.capacity ?? 5;
+  const perTick = baseCapacity * 0.5;
   const rawNeed = perTick * 0.3;
-
-  // Giá nguyên liệu thô
   const rawPrice = gs.rawPriceOverride ?? gs.rawPrice;
 
-  // Chỉ sản xuất nếu đủ tiền mua nguyên liệu
-  if (actor.cash >= rawNeed * rawPrice) {
-    actor.cash -= rawNeed * rawPrice; // trả tiền mua nguyên liệu
-    actor.inventory += perTick; // thêm hàng tồn kho
+  // Tính xem có đủ tiền nguyên liệu không
+  const canAffordRatio = Math.min(1, actor.cash / (rawNeed * rawPrice));
+  const realOutput = perTick * canAffordRatio;
 
-    // Tiến trình nhiệm vụ sản xuất (q1) cho player
-    if (who === "player") progress(gs, "q1", Math.floor(perTick));
+  // **Cập nhật năng suất thực = số sản phẩm thực tế sản xuất trong tick này**
+  actor.currentCapacity = realOutput;
+
+  if (actor.cash >= rawNeed * rawPrice) {
+    actor.cash -= rawNeed * rawPrice;
+    actor.inventory += realOutput;
+    if (who === "player") progress(gs, "q1", Math.floor(realOutput));
   }
 }
 
@@ -251,14 +253,8 @@ export function computeExploitationIndex(hours, essentialHours) {
   const surplusHours = Math.max(0, hours - essentialHours); // giờ thặng dư
   const necessaryHours = Math.min(hours, essentialHours); // giờ tất yếu
 
-  // Giá trị thặng dư (m) = giờ thặng dư
-  const m = surplusHours;
-
-  const v = necessaryHours;
-
   // Tỷ suất giá trị thặng dư
-  return v > 0 ? m / v : 0;
-  
+  return necessaryHours > 0 ? surplusHours / necessaryHours : 0;
 }
 
 /**
