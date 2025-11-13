@@ -26,6 +26,7 @@ export default function App() {
   const [snap, setSnap] = useState(() => snapshot(gsRef.current));
   const rafRef = useRef(0);
   const [showTutorial, setShowTutorial] = useState(true);
+  const showTutorialRef = useRef(showTutorial);
 
   // ===== Game loop =====
   // useEffect chạy 1 lần khi component mount -> khởi động game loop bằng requestAnimationFrame
@@ -61,6 +62,10 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    showTutorialRef.current = showTutorial;
+  }, [showTutorial]);
+
   // ===== Win/Lose checker (chỉ thắng khi 100% thị phần + không còn đối thủ) =====
   // Tính toán net worth (giá trị ròng) của player — dùng để kiểm tra / debug / hiển thị
   function netWorth(gs) {
@@ -94,7 +99,7 @@ export default function App() {
   // step: một tick cập nhật trạng thái (cả continuous và discrete logic)
   // ==================== step() ====================
   function step(gs, dt) {
-    if (showTutorial) return;
+    if (showTutorialRef.current) return;
     if (gs.result) return;
 
     gs.t += dt;
