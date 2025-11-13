@@ -321,19 +321,6 @@ export default function App() {
     }
   }
 
-  // concernIntegrate: mua mỏ nguyên liệu & vận tải, tác động lên rawPriceOverride
-  function concernIntegrate() {
-    const gs = gsRef.current;
-    if (guardEnded()) return;
-    if (gs.stage !== "MONOPOLY") return;
-    if (spend(300, "mua mỏ nguyên liệu & vận tải")) {
-      gs.rawPriceOverride = Math.max(1.2, gs.rawPrice * 0.5);
-      gs.player.ownsRawMonopoly = true;
-      gs.toast = "Liên kết dọc thành công!";
-      setSnap(snapshot(gs));
-    }
-  }
-
   // exportCapital: đầu tư ra nước ngoài tăng foreignCapacity
   function exportCapital() {
     const gs = gsRef.current;
@@ -589,14 +576,6 @@ export default function App() {
                       </button>
                       <button
                         className="btn"
-                        onClick={concernIntegrate}
-                        disabled={isEnded}
-                        style={disStyle(isEnded)}
-                      >
-                        Concern: Liên kết dọc
-                      </button>
-                      <button
-                        className="btn"
                         onClick={exportCapital}
                         disabled={isEnded}
                         style={disStyle(isEnded)}
@@ -789,14 +768,6 @@ export default function App() {
                 onClose={() => setUI({ ...ui, openPanel: null })}
               >
                 <div className="flex gap-2 flex-wrap">
-                  <button
-                    className="btn"
-                    onClick={lobbyGovernment}
-                    disabled={isEnded}
-                    style={disStyle(isEnded)}
-                  >
-                    Vận động hành lang
-                  </button>
                   <button
                     className="btn"
                     onClick={() =>
