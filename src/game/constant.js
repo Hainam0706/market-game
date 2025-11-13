@@ -17,7 +17,6 @@ export const ZONES = {
   marketplace: { x: 400, y: 80, w: 320, h: 220, name: "Khu Chợ" },
   raw: { x: 760, y: 80, w: 280, h: 220, name: "Khu Nguyên Liệu" },
   bank: { x: 40, y: 340, w: 240, h: 220, name: "Ngân Hàng" },
-  bulletin: { x: 320, y: 340, w: 340, h: 220, name: "Bảng Tin Kinh Tế" },
   hq: { x: 700, y: 340, w: 340, h: 220, name: "Trụ Sở / Chính Phủ" },
 };
 
