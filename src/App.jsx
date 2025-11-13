@@ -558,16 +558,6 @@ export default function App() {
                     <div className="flex gap-2 flex-wrap">
                       <button
                         className="btn"
-                        onClick={cartelToggle}
-                        disabled={isEnded}
-                        style={disStyle(isEnded)}
-                      >
-                        {snap.player.cartelMode
-                          ? "Rời Cartel"
-                          : "Thiết lập Cartel"}
-                      </button>
-                      <button
-                        className="btn"
                         onClick={trustTakeover}
                         disabled={isEnded}
                         style={disStyle(isEnded)}
