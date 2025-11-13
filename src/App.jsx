@@ -832,14 +832,14 @@ export default function App() {
               >
                 🏦 Ngân hàng
               </button>
-              <button
+              {/* <button
                 className="btn"
                 onClick={() => setUI({ ...ui, openPanel: "hq" })}
                 disabled={isEnded || snap.stage !== "MONOPOLY"}
                 style={disStyle(isEnded || snap.stage !== "MONOPOLY")}
               >
                 🏛️ Trụ sở
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
